@@ -1,37 +1,39 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { ContextEjemploProvider } from "@/context/ContextEjemplo";
+import { Tabs } from "expo-router";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
-  );
+    return (
+        <ContextEjemploProvider>
+            <Tabs>
+                <Tabs.Screen
+                    name="(redux)"
+                    options={{
+                        title: "Redux",
+                        tabBarIcon: ({ color }) => <TabBarIcon name="link" color={color} />
+                    }}
+                />
+                <Tabs.Screen
+                    name="(react-query)"
+                    options={{
+                        title: "React Query",
+                        tabBarIcon: ({ color }) => <TabBarIcon name="code-slash" color={color} />
+                    }}
+                />
+                <Tabs.Screen
+                    name="(context)"
+                    options={{
+                        title: "Context",
+                        tabBarIcon: ({ color }) => <TabBarIcon name="link" color={color} />
+                    }}
+                />
+                <Tabs.Screen
+                    name="index"
+                    options={{
+                        href: null,
+                    }}
+                />
+            </Tabs>
+        </ContextEjemploProvider>
+    );
 }
