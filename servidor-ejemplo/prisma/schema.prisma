@@ -10,17 +10,39 @@ datasource db {
 }
 
 model Dueno {
-  id        Int      @id @default(autoincrement())
-  nombre    String
-  apellido  String
-  mascota   Mascota[]
+  id       Int       @id @default(autoincrement())
+  nombre   String
+  apellido String
+  mascota  Mascota[]
 }
 
 model Mascota {
-  id       Int      @id @default(autoincrement())
-  nombre   String
-  raza     String
-  dueno    Dueno    @relation(fields: [duenoId], references: [id])
-  duenoId  Int
+  id      Int    @id @default(autoincrement())
+  nombre  String
+  raza    String
+  dueno   Dueno  @relation(fields: [duenoId], references: [id])
+  duenoId Int
 }
 
+model Operaciones_Pre_Venta {
+  operacionesPreVentaId String   @id
+  clienteId             Int      @unique
+  vehiculoId            String   @unique
+  totalPresupuestado    Float
+  fecha                 DateTime @default(now())
+  vigencia              Int
+  operacionesVentaId    String?
+
+  Operaciones_Venta Operaciones_Venta?
+}
+
+model Operaciones_Venta {
+  operacionesVentaId    String   @id
+  promosEID             String?  @unique
+  totalConDescuentos    Int
+  fechaFactura          DateTime @default(now())
+  nroFactura            String   @unique
+  operacionesPreVentaId String   @unique
+
+  Operaciones_Pre_Venta Operaciones_Pre_Venta @relation(fields: [operacionesPreVentaId], references: [operacionesPreVentaId])
+}
