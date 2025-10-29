@@ -37,6 +37,7 @@ export const useCrearMascota = (duenioId?: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
+        mutationKey: ['crear-mascota'],
         mutationFn: (params: { nombre: string, raza: string }) => postNewMascota({ ...params, duenioId }),
         onSettled: () => {
             queryClient.invalidateQueries({

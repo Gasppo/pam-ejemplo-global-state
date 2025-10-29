@@ -3,19 +3,21 @@ import React from 'react'
 import { useAppSelector } from '@/redux/store';
 import { Link, useLocalSearchParams } from 'expo-router';
 import { useDuenioInformation } from '@/react-query/useDuenioInformation';
+import { useIsMutating } from '@tanstack/react-query'
 
 const Mascotas = () => {
 
     const { duenioId } = useLocalSearchParams<{ duenioId?: string }>();
 
     const { data, isFetching } = useDuenioInformation(duenioId);
+    const isCreatingPet = !!useIsMutating({ mutationKey: ['crear-mascota'] })
 
     if (!duenioId) return <Text>No seleccionaste un usuario</Text>
 
     return (
         <View style={styles.container}>
             <View />
-            {!isFetching && data && <FlatList data={data.mascota} renderItem={({ item }) => (
+            {!isFetching && !isCreatingPet && data && <FlatList data={data.mascota} renderItem={({ item }) => (
                 <View style={styles.mascotaContainer}>
                     <Text style={styles.label}>Nombre:</Text>
                     <Text style={styles.mascotaText}>{item.nombre}</Text>
@@ -24,7 +26,7 @@ const Mascotas = () => {
                 </View>
             )
             } />}
-            {isFetching && <ActivityIndicator color="#0000ff" />}
+            {(isFetching || isCreatingPet) && <ActivityIndicator color="#0000ff" />}
             <View style={{ marginTop: 20 }}>
                 <Link href={{ pathname: '/agregar', params: { duenioId } }} asChild >
                     <TouchableOpacity style={styles.button}>

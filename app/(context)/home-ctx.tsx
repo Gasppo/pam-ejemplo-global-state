@@ -1,11 +1,11 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useContextEjemplo } from '@/context/ContextEjemplo'
 import { Link } from 'expo-router'
 
 const HomeCTX = () => {
 
-    const { nombre, isLoggedIn, login, logout } = useContextEjemplo()
+    const { nombre, isLoggedIn, login, logout,  } = useContextEjemplo()
 
     if (!isLoggedIn) {
         return (
